@@ -51,9 +51,13 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+{{--                                    <div style="display: flex; align-items: center;">--}}
+{{--                                        <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">--}}
+{{--                                            <img src="{{ Auth::user()->avatar }}" alt="" style="width: 100%; height: auto;">--}}
+{{--                                        </div>--}}
+                                        <span style="margin-left: 10px;">{{ Auth::user()->name }}</span>
+{{--                                    </div>--}}
                                 </a>
-
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

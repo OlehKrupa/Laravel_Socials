@@ -10,50 +10,38 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function redirectToGoogle()
-    {
-        return Socialite::driver('google')->redirect();
-    }
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function handleGoogleCallback()
     {
         try {
-
             $user = Socialite::driver('google')->user();
+            // Проверьте, существует ли пользователь с таким email
+            $existingUser = User::where('email', $user->email)->first();
 
-            $finduser = User::where('google_id', $user->id)->first();
+            if ($existingUser) {
+                // Если пользователь существует, обновите google_id (если он изменился)
+                $existingUser->google_id = $user->id;
+                $existingUser->save();
 
-            if($finduser){
-
-                Auth::login($finduser);
-
-                return redirect()->intended('dashboard');
-
-            }else{
-                $newUser = User::updateOrCreate(['email' => $user->email],[
+                // Аутентифицируйте пользователя с помощью встроенной аутентификации Laravel
+                Auth::login($existingUser);
+            } else {
+                // Создайте нового пользователя, если такого email нет
+                $newUser = User::create([
                     'name' => $user->name,
-                    'google_id'=> $user->id,
-                    'password' => encrypt('123456dummy')
+                    'email' => $user->email,
+                    'avatar' => $user->avatar,
+                    'google_id' => $user->id,
+                    'password' => '12345678',
                 ]);
-
+                // Аутентифицируйте нового пользователя
                 Auth::login($newUser);
-
-                return redirect()->intended('dashboard');
             }
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dd($e);
+            return redirect()->route('login')->with('error', 'Произошла ошибка при аутентификации.');
         }
+        return redirect()->to('/home'); // Редирект на нужную страницу после аутентификации
     }
+
 }

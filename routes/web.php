@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +22,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::controller(GoogleController::class)->group(function(){
-    Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
-    Route::get('auth/google/callback', 'handleGoogleCallback');
+Route::get('auth/redirect', function() {
+    return Socialite::driver('google')->redirect();
 });
+Route::get('auth/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
