@@ -75,9 +75,6 @@
                                         <a href="#">
                                             <img src="https://img.icons8.com/color/2x/github.png" alt="GitHub" width="48" height="48">
                                         </a>
-                                        <a href="#">
-                                            <img src="https://img.icons8.com/color/2x/linkedin.png" alt="LinkedIn" width="48" height="48">
-                                        </a>
                                     </div>
                                 </div>
                             </div>
