@@ -22,9 +22,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('auth/redirect', function() {
-    return Socialite::driver('google')->redirect();
-});
+Route::get('auth/redirect', [GoogleController::class, 'redirectToGoogle']);
 Route::get('auth/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
