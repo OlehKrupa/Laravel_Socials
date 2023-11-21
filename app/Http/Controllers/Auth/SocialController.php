@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RandomPasswordMail;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
@@ -20,7 +22,6 @@ class SocialController extends Controller
         try {
             $user = Socialite::driver($provider)->user();
 
-            // Проверьте, существует ли пользователь с таким email
             $existingUser = User::where('email', $user->email)->first();
 
             if ($existingUser) {
@@ -29,21 +30,35 @@ class SocialController extends Controller
 
                 Auth::login($existingUser);
             } else {
+                $password = $this->str_random(12);
+
                 $newUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
                     'avatar' => $user->avatar,
+                    'password' => $password,
                     $provider . '_id' => $user->id,
-//                    'password' => '12345678',
                 ]);
+
+                Mail::to($newUser->email)->send(new RandomPasswordMail($password));
 
                 Auth::login($newUser);
             }
         } catch (Exception $e) {
-            dd($e);
-            return redirect()->route('login')->with('error', 'Произошла ошибка при аутентификации.');
+            return redirect()->route('login')->with('error', $e);
         }
 
         return redirect()->to('/home');
+    }
+
+    private function str_random($length) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomString;
     }
 }
