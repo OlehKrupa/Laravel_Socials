@@ -74,9 +74,6 @@
                                         <a href="auth/microsoft/redirect" class="btn btn-info btn-block btn-icon mt-2">
                                             <img src="https://img.icons8.com/color/2x/microsoft.png" alt="Microsoft" width="48" height="48">
                                         </a>
-                                        <a href="auth/facebook/redirect" class="btn btn-primary btn-block btn-icon mt-2">
-                                            <img src="https://img.icons8.com/color/2x/facebook.png" alt="Facebook" width="48" height="48">
-                                        </a>
                                     </div>
 
                                 </div>
