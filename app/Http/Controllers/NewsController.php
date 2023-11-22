@@ -40,4 +40,10 @@ class NewsController extends Controller
 
         return redirect()->route('news.index')->with('success', 'Новость добавлена успешно!');
     }
+
+    public function show($id)
+    {
+        $news = News::findOrFail($id);
+        return view('news.show', compact('news'));
+    }
 }

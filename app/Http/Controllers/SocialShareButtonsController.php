@@ -13,12 +13,12 @@ class SocialShareButtonsController extends Controller
         $news = News::find($newsId);
 
         if (!$news) {
-            abort(404); // Обработка случая, когда новость не найдена
+            abort(404);
         }
 
         $shareComponent = Share::page(
-            route('news.index'), // URL новости (замените на актуальный маршрут)
-            $news->title, // Заголовок новости
+            $news->title,
+            route('news.show', ['id' => $news->id])
         )
             ->facebook()
             ->twitter()
