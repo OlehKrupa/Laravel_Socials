@@ -1,23 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+    <div class="container">
+        <h1>Welcome to Socials</h1>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+        <button class="btn btn-primary" onclick="loadContent('/news')">{{__("View news")}}</button>
+        <button class="btn btn-success" onclick="loadContent('/news/create')">{{__("Offer news")}}</button>
 
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
+        <div id="content-container"></div>
     </div>
-</div>
+
+    <script>
+        function loadContent(url) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('content-container').innerHTML = data;
+                });
+        }
+    </script>
 @endsection
