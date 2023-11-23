@@ -3,8 +3,8 @@
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\SocialShareButtonsController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,26 +17,37 @@ use App\Http\Controllers\NewsController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/', fn() => view('welcome'))->name('welcome');
 
 Auth::routes();
 
-Route::get('auth/{provider}/redirect', [SocialController::class, 'redirectToProvider']);
-Route::get('auth/{provider}/callback', [SocialController::class, 'handleProviderCallback']);
+// Social Auth Routes
+Route::prefix('auth/{provider}')->group(function () {
+    Route::get('/redirect', [SocialController::class, 'redirectToProvider']);
+    Route::get('/callback', [SocialController::class, 'handleProviderCallback']);
+});
 
-Route::get('/social-media-share', [SocialShareButtonsController::class,'ShareCurrentPageWidget']);
-Route::get('/social-media-share/{newsId}', [SocialShareButtonsController::class,'ShareWidget'])->name('social.share');
+// Social Media Share Routes
+Route::get('/social-media-share', [SocialShareButtonsController::class, 'ShareCurrentPageWidget']);
+Route::get('/social-media-share/{newsId}', [SocialShareButtonsController::class, 'ShareWidget'])->name('social.share');
 
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-Route::get('/news/create', [NewsController::class, 'create'])->name('news.create');
-Route::post('/news/store', [NewsController::class, 'store'])->name('news.store');
-Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
+// News Routes
+Route::prefix('news')->group(function () {
+    Route::get('/', [NewsController::class, 'index'])->name('news.index');
+    Route::get('/{id}', [NewsController::class, 'show'])->name('news.show');
+});
 
-Route::post('/toggle-subscription', [UserController::class, 'toggleSubscription'])
-    ->middleware('auth')
-    ->name('toggle-subscription');
-Route::get('/user/send-test-message', [UserController::class, 'sendTestMessage'])->name('user.send-test-message');
+// User Routes
+Route::middleware(['auth'])->group(function () {
+    Route::post('/toggle-subscription', [UserController::class, 'toggleSubscription'])->name('toggle-subscription');
+    Route::get('/user/send-test-message', [UserController::class, 'sendTestMessage'])->name('user.send-test-message');
 
+    // News Routes under auth protection
+    Route::prefix('news')->group(function () {
+        Route::get('/create', [NewsController::class, 'create'])->name('news.create');
+        Route::post('/store', [NewsController::class, 'store'])->name('news.store');
+    });
+});
+
+// Home Route
 Route::middleware(['auth:sanctum', 'verified'])->get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
