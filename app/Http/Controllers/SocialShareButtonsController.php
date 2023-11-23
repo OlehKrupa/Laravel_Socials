@@ -40,7 +40,7 @@ class SocialShareButtonsController extends Controller
         )
             ->facebook()
             ->twitter()
-            ->linkedin('Дополнительное описание для LinkedIn')
+            ->linkedin('Extra linkedin summary can be passed here')
             ->telegram()
             ->whatsapp()
             ->reddit();
