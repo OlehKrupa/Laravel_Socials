@@ -27,7 +27,6 @@ class SocialController extends Controller
             if ($existingUser) {
                 $existingUser->{$provider . '_id'} = $user->id;
                 $existingUser->save();
-
                 Auth::login($existingUser);
             } else {
                 $password = $this->str_random(12);

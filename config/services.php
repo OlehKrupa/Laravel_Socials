@@ -49,4 +49,16 @@ return [
         'redirect' => env('FACEBOOK_REDIRECT_URI')
     ],
 
+    'twitter' => [
+        'client_id' => env('TWITTER_CLIENT_ID'),
+        'client_secret' => env('TWITTER_CLIENT_SECRET'),
+        'redirect' => env('TWITTER_REDIRECT_URI')
+    ],
+
+    'reddit' => [
+        'client_id' => env('REDDIT_CLIENT_ID'),
+        'client_secret' => env('REDDIT_CLIENT_SECRET'),
+        'redirect' => env('REDDIT_REDIRECT_URI')
+    ],
+
 ];
