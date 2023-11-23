@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Mail\RandomPasswordMail;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
@@ -14,12 +15,18 @@ class SendDailyMessage extends Command
 
     public function handle()
     {
-        $users = User::where('created_at', '<=', now()->subDays(5))
-            ->where('is_subscribed', 1)
+        $users = User::subscribed()
+            ->createdWithinLast5Days()
             ->get();
 
         foreach ($users as $user) {
-            Mail::to($user->email)->send(new RandomPasswordMail(12345));
+            $message = 'Message';
+
+            Mail::raw($message, function ($mail) use ($user) {
+                $mail->to($user->email)->subject('Daily');
+            });
+
+            $this->info("Daily message sent to {$user->email}");
         }
     }
 }

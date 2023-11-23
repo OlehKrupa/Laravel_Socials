@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
+
 
 class User extends Authenticatable
 {
@@ -51,5 +54,15 @@ class User extends Authenticatable
     public function news()
     {
         return $this->hasMany(News::class);
+    }
+
+    public function scopeSubscribed(Builder $query)
+    {
+        return $query->where('is_subscribed', true);
+    }
+
+    public function scopeCreatedWithinLast5Days(Builder $query)
+    {
+        return $query->whereDate('created_at', '>', Carbon::now()->subDays(5));
     }
 }
