@@ -10,6 +10,7 @@ class SocialShareButtonsController extends Controller
 {
     public function ShareWidget($newsId)
     {
+        Share::currentPage()->facebook();
         $news = News::find($newsId);
 
         if (!$news) {
@@ -22,11 +23,28 @@ class SocialShareButtonsController extends Controller
         )
             ->facebook()
             ->twitter()
-            ->linkedin()
+            ->linkedin('Extra linkedin summary can be passed here')
             ->telegram()
             ->whatsapp()
             ->reddit();
 
         return view('posts', compact('shareComponent', 'news'));
+    }
+
+    public function ShareCurrentPageWidget()
+    {
+
+        $shareComponent = Share::page(
+            'Socials website',
+            route('welcome')
+        )
+            ->facebook()
+            ->twitter()
+            ->linkedin('Дополнительное описание для LinkedIn')
+            ->telegram()
+            ->whatsapp()
+            ->reddit();
+
+        return view('posts', compact('shareComponent'));
     }
 }

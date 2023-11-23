@@ -30,7 +30,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        <a class="btn btn-primary" href="/news">{{__("View news")}}</a>
 
+                        <a class="btn btn-success" href="/news/create">{{__("Offer news")}}</a>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
