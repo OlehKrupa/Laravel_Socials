@@ -62,12 +62,25 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+
+                                <a class="dropdown-item" href="{{route('toggle-subscription')}}"
+                                   onclick="event.preventDefault(); document.getElementById('toggle-subscribe').submit();">
+                                    @if(Auth::user()->is_subscribed)
+                                        Unsubscribe
+                                    @else
+                                        Subscribe
+                                    @endif
+                                </a>
+
+                                <form id="toggle-subscribe" action="{{route('toggle-subscription')}}" method="POST"
+                                      class="d-none">
                                     @csrf
                                 </form>
                             </div>
