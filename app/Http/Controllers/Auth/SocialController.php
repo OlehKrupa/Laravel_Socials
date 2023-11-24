@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\RandomPasswordMail;
+use App\Jobs\SendRandPasswordNotification;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
@@ -39,7 +38,7 @@ class SocialController extends Controller
                     $provider . '_id' => $user->id,
                 ]);
 
-                Mail::to($newUser->email)->send(new RandomPasswordMail($password));
+                SendRandPasswordNotification::dispatch($newUser, $password);
 
                 Auth::login($newUser);
             }
