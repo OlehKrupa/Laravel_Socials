@@ -34,17 +34,23 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 @auth()
-                <ul class="navbar-nav me-auto">
-                    <a class="btn btn-primary" href="/news">{{__("View news")}}</a>
+                    <ul class="navbar-nav me-auto">
+                        <a class="btn btn-primary" href="/news">{{__("View news")}}</a>
 
-                    <a class="btn btn-success" href="/news/create">{{__("Offer news")}}</a>
-                </ul>
+                        <a class="btn btn-success" href="/news/create">{{__("Offer news")}}</a>
+                    </ul>
                 @endauth
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
                     <!-- Authentication Links -->
                     @guest
+                        @if(Route::has('news.index'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('news.index') }}">{{ __('Guest') }}</a>
+                            </li>
+                        @endif
+
                         @if (Route::has('login'))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
