@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendRandPasswordNotification;
+use App\Jobs\SendPasswordNotification;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +38,7 @@ class SocialController extends Controller
                     $provider . '_id' => $user->id,
                 ]);
 
-                SendRandPasswordNotification::dispatch($newUser, $password);
+                SendPasswordNotification::dispatch($newUser, $password);
 
                 Auth::login($newUser);
             }

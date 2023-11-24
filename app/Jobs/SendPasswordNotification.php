@@ -3,14 +3,14 @@
 namespace App\Jobs;
 
 use App\Models\User;
-use App\Notifications\RandomPasswordNotification;
+use App\Notifications\PasswordNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SendRandPasswordNotification implements ShouldQueue
+class SendPasswordNotification implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -25,6 +25,6 @@ class SendRandPasswordNotification implements ShouldQueue
 
     public function handle()
     {
-        $this->user->notify(new RandomPasswordNotification($this->password));
+        $this->user->notify(new PasswordNotification($this->password));
     }
 }
