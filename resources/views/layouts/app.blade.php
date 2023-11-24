@@ -93,6 +93,56 @@
         </div>
     </nav>
 
+    <!-- Всплывающее окно -->
+    <div id="subscriptionConfirmation" class="popup">
+        @if(session('subscription_confirmation') || isset($subscription_confirmation))
+            <div class="popup-content">
+                <span class="close" onclick="closePopup()">&times;</span>
+                <p>{{ session('subscription_confirmation') ?? 'Confirmation sent by email.' }}</p>
+            </div>
+        @endif
+    </div>
+
+    <script>
+        function closePopup() {
+            document.getElementById('subscriptionConfirmation').style.display = 'none';
+        }
+
+        window.onload = function () {
+            if ('{{ session('subscription_confirmation') ?? '' }}' !== '') {
+                document.getElementById('subscriptionConfirmation').style.display = 'block';
+            }
+        };
+    </script>
+
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            width: 300px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .popup-content {
+            text-align: center;
+        }
+
+        .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+
     <main class="py-4">
         @yield('content')
     </main>

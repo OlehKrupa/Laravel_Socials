@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\SocialShareButtonsController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
@@ -36,6 +37,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/toggle-subscription', [UserController::class, 'toggleSubscription'])->name('toggle-subscription');
     Route::get('/user/send-test-message', [UserController::class, 'sendTestMessage'])->name('user.send-test-message');
 });
+
+Route::get('/continue-subscription/{user}', [SubscriptionController::class, 'continueSubscription']);
+Route::get('/cancel-subscription/{user}', [SubscriptionController::class, 'cancelSubscription']);
 
 // Authenticated Home Route
 Route::middleware(['auth:sanctum', 'verified'])->get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

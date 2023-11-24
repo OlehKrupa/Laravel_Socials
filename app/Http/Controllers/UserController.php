@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendSubscriptionNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -13,9 +14,13 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        $user->is_subscribed = !$user->is_subscribed;
+//        $user->is_subscribed = !$user->is_subscribed;
 
-        $user->save();
+//        $user->save();
+
+        SendSubscriptionNotification::dispatch($user);
+
+        session()->flash('subscription_confirmation', 'Confirmation sent by email.');
 
         return redirect()->back();
     }
@@ -26,7 +31,7 @@ class UserController extends Controller
         $message = '123';
 
         Mail::raw($message, function ($mail) use ($user) {
-            $mail->to($user->email)->subject('Новое сообщение');
+            $mail->to($user->email)->subject('New mail');
         });
     }
 }
