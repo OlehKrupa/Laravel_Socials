@@ -3,6 +3,7 @@ use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\SocialShareButtonsController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UtmController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 
@@ -38,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/send-test-message', [UserController::class, 'sendTestMessage'])->name('user.send-test-message');
 });
 
+Route::get('/track-utm', [UtmController::class, 'trackUtm']);
 Route::get('/continue-subscription/{user}', [SubscriptionController::class, 'continueSubscription']);
 Route::get('/cancel-subscription/{user}', [SubscriptionController::class, 'cancelSubscription']);
 
