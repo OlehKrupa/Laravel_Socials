@@ -70,8 +70,6 @@ class WelcomeNotification extends Notification
 //
 //        $trackedLink = $this->link . '?' . http_build_query($utmParameters);
 
-        $this->trackClick($notifiable);
-
         return (new MailMessage)
             ->line($this->message)
             ->greeting('Hello, ' . $notifiable->name)
@@ -79,21 +77,6 @@ class WelcomeNotification extends Notification
             ->line('Thank you for using our application!')
             ->subject($this->title);
 //            ->action('Stop Subscription', url("/cancel-subscription/{$notifiable->id}"));
-    }
-
-    /**
-     * Track the click on the notification link.
-     *
-     * @param object $notifiable
-     */
-    private function trackClick(object $notifiable)
-    {
-        $notificationClick = new NotificationClick();
-
-        $notificationClick->notifiable_id = $notifiable->id;
-        $notificationClick->link = $this->link;
-
-        $notificationClick->save();
     }
 
     /**
