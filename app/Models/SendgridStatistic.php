@@ -20,4 +20,16 @@ class SendgridStatistic extends Model
         'useragent',
         'ip',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
+    }
+
+    public function scopeNonAdmin($query)
+    {
+        return $query->whereHas('user', function ($subQuery) {
+            $subQuery->where('is_admin', 0);
+        });
+    }
 }

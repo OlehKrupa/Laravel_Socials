@@ -28,6 +28,7 @@ class User extends Authenticatable
         'facebook_id',
         'twitter_id',
         'is_subscribed',
+        'is_admin',
         'avatar'
     ];
 
@@ -56,9 +57,14 @@ class User extends Authenticatable
         return $this->hasMany(News::class);
     }
 
+    public function scopeAdmins(Builder $query)
+    {
+        return $query->where('is_admin', true);
+    }
+
     public function scopeSubscribed(Builder $query)
     {
-        return $query->where('is_subscribed', true);
+        return $query->where('is_subscribed', true)->where('is_admin', false);
     }
 
     public function scopeCreatedWithinLast5Days(Builder $query)
