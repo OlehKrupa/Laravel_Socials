@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\SendgridWebhookController;
 use App\Http\Controllers\SocialShareButtonsController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
@@ -7,11 +8,13 @@ use App\Http\Controllers\UtmController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+//Route::get('/', function () {
+//    return view('welcome');
+//})->name('welcome');
 
 Auth::routes();
+
+Route::post('/', [SendgridWebhookController::class, 'handleWebhook'])->withoutMiddleware(['VerifyCsrfToken']);
 
 // Social Authentication Routes
 Route::prefix('auth/{provider}')->group(function () {
@@ -36,7 +39,7 @@ Route::prefix('news')->group(function () {
 // User Routes
 Route::middleware(['auth'])->group(function () {
     Route::post('/toggle-subscription', [UserController::class, 'toggleSubscription'])->name('toggle-subscription');
-    Route::get('/user/send-test-message', [UserController::class, 'sendTestMessage'])->name('user.send-test-message');
+    Route::get('/test', [UserController::class, 'Test'])->name('test');
 });
 
 Route::get('/track-utm', [UtmController::class, 'trackUtm']);
