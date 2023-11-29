@@ -14,7 +14,7 @@ use App\Http\Controllers\NewsController;
 
 Auth::routes();
 
-Route::post('/', [SendgridWebhookController::class, 'handleWebhook'])->withoutMiddleware(['VerifyCsrfToken']);
+Route::post('/', [SendgridWebhookController::class, 'handleWebhook']);
 
 // Social Authentication Routes
 Route::prefix('auth/{provider}')->group(function () {
