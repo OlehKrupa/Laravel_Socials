@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 
 class SendDailyMessage extends Command
 {
-    protected $signature = 'send:daily-message';
+    protected $signature = 'email:send-daily';
     protected $description = 'Send daily messages to users';
 
     public function handle()

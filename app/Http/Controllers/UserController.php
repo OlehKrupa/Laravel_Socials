@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendSubscriptionNotification;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -25,13 +26,9 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function sendTestMessage()
+    public function Test()
     {
-        $user = Auth::user();
-        $message = '123';
-
-        Mail::raw($message, function ($mail) use ($user) {
-            $mail->to($user->email)->subject('New mail');
-        });
+//        $apiKey = getenv('MAIL_PASSWORD');
+//        $sg = new \SendGrid($apiKey);
     }
 }
