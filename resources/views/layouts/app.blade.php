@@ -33,16 +33,24 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav me-auto">
-                    <a class="btn btn-primary" href="/news">{{__("View news")}}</a>
+                @auth()
+                    <ul class="navbar-nav me-auto">
+                        <a class="btn btn-primary" href="/news">{{__("View news")}}</a>
 
-                    <a class="btn btn-success" href="/news/create">{{__("Offer news")}}</a>
-                </ul>
+                        <a class="btn btn-success" href="/news/create">{{__("Offer news")}}</a>
+                    </ul>
+                @endauth
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
                     <!-- Authentication Links -->
                     @guest
+                        @if(Route::has('news.index'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('news.index') }}">{{ __('Guest') }}</a>
+                            </li>
+                        @endif
+
                         @if (Route::has('login'))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -62,12 +70,25 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+
+                                <a class="dropdown-item" href="{{route('toggle-subscription')}}"
+                                   onclick="event.preventDefault(); document.getElementById('toggle-subscribe').submit();">
+                                    @if(Auth::user()->is_subscribed)
+                                        Unsubscribe
+                                    @else
+                                        Subscribe
+                                    @endif
+                                </a>
+
+                                <form id="toggle-subscribe" action="{{route('toggle-subscription')}}" method="POST"
+                                      class="d-none">
                                     @csrf
                                 </form>
                             </div>
@@ -77,6 +98,56 @@
             </div>
         </div>
     </nav>
+
+    <!-- Всплывающее окно -->
+    <div id="subscriptionConfirmation" class="popup">
+        @if(session('subscription_confirmation') || isset($subscription_confirmation))
+            <div class="popup-content">
+                <span class="close" onclick="closePopup()">&times;</span>
+                <p>{{ session('subscription_confirmation') ?? 'Confirmation sent by email.' }}</p>
+            </div>
+        @endif
+    </div>
+
+    <script>
+        function closePopup() {
+            document.getElementById('subscriptionConfirmation').style.display = 'none';
+        }
+
+        window.onload = function () {
+            if ('{{ session('subscription_confirmation') ?? '' }}' !== '') {
+                document.getElementById('subscriptionConfirmation').style.display = 'block';
+            }
+        };
+    </script>
+
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            width: 300px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .popup-content {
+            text-align: center;
+        }
+
+        .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
 
     <main class="py-4">
         @yield('content')

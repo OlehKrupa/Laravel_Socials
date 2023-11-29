@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
+
 
 class User extends Authenticatable
 {
@@ -24,6 +27,8 @@ class User extends Authenticatable
         'google_id',
         'facebook_id',
         'twitter_id',
+        'is_subscribed',
+        'is_admin',
         'avatar'
     ];
 
@@ -50,5 +55,20 @@ class User extends Authenticatable
     public function news()
     {
         return $this->hasMany(News::class);
+    }
+
+    public function scopeAdmins(Builder $query)
+    {
+        return $query->where('is_admin', true);
+    }
+
+    public function scopeSubscribed(Builder $query)
+    {
+        return $query->where('is_subscribed', true)->where('is_admin', false);
+    }
+
+    public function scopeCreatedWithinLast5Days(Builder $query)
+    {
+        return $query->whereDate('created_at', '>', Carbon::now()->subDays(5));
     }
 }

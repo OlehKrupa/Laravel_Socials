@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\RandomPasswordMail;
+use App\Jobs\SendPasswordNotification;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
@@ -39,7 +38,7 @@ class SocialController extends Controller
                     $provider . '_id' => $user->id,
                 ]);
 
-                Mail::to($newUser->email)->send(new RandomPasswordMail($password));
+                SendPasswordNotification::dispatch($newUser, $password);
 
                 Auth::login($newUser);
             }
@@ -51,12 +50,12 @@ class SocialController extends Controller
     }
 
     private function str_random($length) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
+//        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '12345678';
 
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
-        }
+//        for ($i = 0; $i < $length; $i++) {
+//            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+//        }
 
         return $randomString;
     }
