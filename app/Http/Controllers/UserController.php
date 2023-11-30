@@ -28,7 +28,6 @@ class UserController extends Controller
 
     public function Test()
     {
-//        $apiKey = getenv('MAIL_PASSWORD');
-//        $sg = new \SendGrid($apiKey);
+        dd(1);
     }
 }

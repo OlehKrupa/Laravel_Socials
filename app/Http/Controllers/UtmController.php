@@ -19,6 +19,6 @@ class UtmController extends Controller
             'utm_campaign' => $utmCampaign,
         ]);
 
-        return redirect('/');
+        return redirect('/home');
     }
 }
